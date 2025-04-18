@@ -10,9 +10,6 @@ export function getSourceSentence(idx: number, fullText: string) {
   
     while (startIdx > 0) {
       const char = fullText[startIdx - 1];
-      console.log({
-        fullText: fullText.slice(startIdx, endIdx).trim(),
-      });
       if (sentenceStartings.includes(char)) {
         break;
       }
@@ -22,9 +19,6 @@ export function getSourceSentence(idx: number, fullText: string) {
     // Find the end of the sentence (looking forwards)
     while (endIdx < fullText.length) {
       const char = fullText[endIdx];
-      console.log({
-        fullText: fullText.slice(startIdx, endIdx).trim(),
-      });
       if (sentenceEndings.includes(char)) {
         endIdx++; // Include the punctuation
         break;

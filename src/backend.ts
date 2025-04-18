@@ -12,7 +12,9 @@ export type ComplianceViolation = {
   message: string;
   severity: string;
   suggestions?: string[];
-  sourceSentence?: string
+  sourceSentence?: string;
+  startIdxOfOriginalFragment?: number;
+  endIdxOfOriginalFragment?: number;
 };
 
 export function getComplianceViolations(): ComplianceViolation[] {

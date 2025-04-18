@@ -17,7 +17,7 @@ export function Suggestion({
     strikeOutEndIdx
   );
   const struckOutText = (
-    <span className="line-through bg-red-500">{textToStrikeOut}</span>
+    <span className="line-through bg-red-200">{textToStrikeOut}</span>
   );
 
   const shouldCapitalize =
@@ -28,7 +28,7 @@ export function Suggestion({
     : suggestion.charAt(0).toLowerCase() + suggestion.slice(1);
 
   const greenReplacement = finalReplacement.length ? (
-    <span className="bg-green-500">{finalReplacement}</span>
+    <span className="bg-green-200">{finalReplacement}</span>
   ) : (
     ""
   );

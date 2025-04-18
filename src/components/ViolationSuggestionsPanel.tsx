@@ -5,38 +5,40 @@ import { SuggestionPanel } from "./SuggestionPanel";
 import { ViolationNavigator } from "./ViolationNavigator";
 import { ChosenSuggestions } from "@/utils/get-initial-chosen-suggestions";
 
+
 export function ViolationSuggestionsPanel({
   violationSuggestions,
-  idxOfViolationInView,
   onClickPrev,
   onClickNext,
-  onSelectSuggestion,
+  onChooseSuggestion,
   chosenSuggestions,
+  idxOfViolationBeingViewed,
 }: {
   violationSuggestions: ComplianceViolation[];
-  idxOfViolationInView: number;
   onClickPrev: () => void;
   onClickNext: () => void;
-  onSelectSuggestion: (violationId: string, isOriginalSelected: boolean | undefined, chosenSuggestions: number | undefined) => void;
+  onChooseSuggestion: (violationId: string, isOriginalSelected: boolean | undefined, chosenSuggestions: number | undefined) => void;
   chosenSuggestions: ChosenSuggestions;
+  idxOfViolationBeingViewed: number;
 }) {
   const numViolations = violationSuggestions.length;
-  const violationInView = violationSuggestions[idxOfViolationInView];
+  const violationInView = violationSuggestions[idxOfViolationBeingViewed];
 
   return (
     <div >
       <ViolationNavigator
         numViolations={numViolations}
-        currViolationIdx={idxOfViolationInView}
+        idxOfCurrViolation={idxOfViolationBeingViewed}
         onClickPrev={onClickPrev}
         onClickNext={onClickNext}
+
       />
       <div className="flex flex-col gap-2">
         {violationInView && (
           <SuggestionPanel
             violation={violationInView}
             chosenSuggestions={chosenSuggestions}
-            onSelectSuggestion={onSelectSuggestion}
+            onChooseSuggestion={onChooseSuggestion}
           />
         )}
       </div>

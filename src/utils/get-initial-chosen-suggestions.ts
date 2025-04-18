@@ -3,7 +3,7 @@ import { ComplianceViolation } from "@/backend";
 export type ChosenSuggestions = Record<
   string,
   {
-    idxOfSelectedSuggestion: number | undefined;
+    idxOfChosenSuggestion: number | undefined;
     isOriginalSelected: boolean | undefined;
   } | undefined
 >;
@@ -15,8 +15,8 @@ export function getInitialChosenSuggestions(
 
   violationSuggestions.forEach((violation) => {
     state[violation.id] = {
-      idxOfSelectedSuggestion: undefined,
-      isOriginalSelected: false,
+      idxOfChosenSuggestion: undefined,
+      isOriginalSelected: true,
     };
   });
 

@@ -5,24 +5,23 @@ import { Suggestion } from "./Suggestion";
 import { getStartAndEndIdxOfSubstring } from "@/utils/get-start-and-end-idx-of-substring";
 import { HighlightedSentence } from "./HighlightedSentence";
 import { ChosenSuggestions } from "@/utils/get-initial-chosen-suggestions";
+import { getSeverityColor } from "@/utils/get-severity-color";
 
 export function SuggestionPanel({
   violation,
   chosenSuggestions,
-  onSelectSuggestion,
+  onChooseSuggestion,
 }: {
   violation: ComplianceViolation;
   chosenSuggestions: ChosenSuggestions;
-  onSelectSuggestion: (
+  onChooseSuggestion: (
     violationId: string,
     isOriginalSelected: boolean | undefined,
-    idxOfSelectedSuggestion: number | undefined
+    idxOfChosenSuggestion: number | undefined
   ) => void;
 }) {
+  const chosenSuggestionForViolation = chosenSuggestions[violation.id];
 
-  const chosenSuggestionStateForViolation = chosenSuggestions[violation.id];
-  
-  
   const {
     text: fragmentOfOriginalSentence,
     sourceSentence,
@@ -36,8 +35,6 @@ export function SuggestionPanel({
     severity,
   } = violation;
 
-  const selectedClassName = "border border-gray-800";
-
   if (!sourceSentence) {
     return <div>No source sentence found</div>;
   }
@@ -49,20 +46,26 @@ export function SuggestionPanel({
     fragmentOfOriginalSentence,
     sourceSentence
   );
-  const baseClassName =
-    "border border-gray-200 rounded-md p-4 hover:cursor-pointer";
-  const hoverClassName = "hover:border-gray-300";
 
-  const markedupSentences = suggestions.map((suggestion, i) => {
+  const baseClassName = "rounded-md p-4 hover:cursor-pointer";
+  const selectedClassName = "border-3 border-black-800";
+  const notSelectedClassName = "border-1 border-black-200";
+
+  const markedupSentencesEls = suggestions.map((suggestion, i) => {
     const hash =
       suggestion.slice(0, 10).trim().toLowerCase() + new Date().getTime();
-    const isSelected = chosenSuggestionStateForViolation?.idxOfSelectedSuggestion === i;
+    const isSelected =
+      chosenSuggestionForViolation?.idxOfChosenSuggestion === i;
     const finalClassName = isSelected
       ? `${baseClassName} ${selectedClassName}`
-      : `${baseClassName} ${hoverClassName}`;
+      : `${baseClassName} ${notSelectedClassName}`;
 
     return (
-      <div key={hash} className={finalClassName} onClick={() => onSelectSuggestion(id, false, i)}>
+      <div
+        key={hash}
+        className={finalClassName}
+        onClick={() => onChooseSuggestion(id, false, i)}
+      >
         <Suggestion
           originalSentence={sourceSentence}
           strikeOutStartIdx={startIdx}
@@ -73,32 +76,44 @@ export function SuggestionPanel({
     );
   });
 
-  const finalClassName = chosenSuggestionStateForViolation?.isOriginalSelected
+  const finalClassName = chosenSuggestionForViolation?.isOriginalSelected
     ? `${baseClassName} ${selectedClassName}`
-    : `${baseClassName} ${hoverClassName}`;
-  const originalSentence = (
-    <div className={finalClassName} onClick={() => onSelectSuggestion(id, true, undefined)}>
-      <HighlightedSentence
-        originalSentence={sourceSentence}
-        highlightStartIdx={startIdx}
-        highlightEndIdx={endIdx}
-        highlightColor="bg-yellow-500"
-      />
+    : `${baseClassName} ${notSelectedClassName}`;
+  const originalSentenceEl = (
+    <HighlightedSentence
+      originalSentence={sourceSentence}
+      highlightStartIdx={startIdx}
+      highlightEndIdx={endIdx}
+      highlightColor="bg-yellow-200"
+    />
+  );
+  const wrappedOriginalSentenceEl = (
+    <div
+      className={finalClassName}
+      onClick={() => onChooseSuggestion(id, true, undefined)}
+    >
+      {originalSentenceEl}
     </div>
   );
 
   const baseClass = "text-sm font-semibold";
-  const colorClass = severity === "error" ? "text-red-500" : "text-yellow-500";
-  const colorCodedSeverity = (
+  const colorClass = getSeverityColor(severity);
+  const colorCodedSeverityEl = (
     <span className={`${baseClass} ${colorClass}`}>{severity}</span>
   );
 
   return (
-    <div
-      key={violation.id}
-      className="bg-white rounded-lg p-6 grid gap-y-8"
-    >
+    <div key={violation.id} className="bg-white rounded-lg p-6 grid gap-y-8">
       <div className="grid gap-y-4 border border-gray-200 rounded-md p-4 ">
+        <div>
+          <div className="text-base font-semibold">Severity</div>
+          {colorCodedSeverityEl}
+        </div>
+
+        <div>
+          <div className="text-base font-semibold">Original Sentence</div>
+          {originalSentenceEl}
+        </div>
         <div>
           <div className="text-base font-semibold">Violation Type</div>
           {type}
@@ -107,10 +122,6 @@ export function SuggestionPanel({
           <div className="text-base font-semibold">Explanation</div>
           {message}
         </div>
-        <div>
-          <div className="text-base font-semibold">Severity</div>
-          {colorCodedSeverity}
-        </div>
       </div>
 
       <div>
@@ -118,11 +129,11 @@ export function SuggestionPanel({
         <div className="flex flex-col gap-y-8">
           <div>
             <div className="text-base font-semibold my-4">Use Original</div>
-            {originalSentence}
+            {wrappedOriginalSentenceEl}
           </div>
           <div>
             <div className="text-base font-semibold my-4">Use Suggestion</div>
-            <div className="grid gap-y-6">{markedupSentences}</div>
+            <div className="grid gap-y-6">{markedupSentencesEls}</div>
           </div>
         </div>
       </div>
