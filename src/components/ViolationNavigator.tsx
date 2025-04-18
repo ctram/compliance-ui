@@ -15,7 +15,7 @@ export function ViolationNavigator({
 }) {
   return (
     <div className="rounded-md p-4 text-center flex flex-col items-center">
-      <div className="text-lg font-bold">
+      <div className="text-xl font-bold">
         Violation {idxOfCurrViolation + 1} of {numViolations}
       </div>
       <div className="flex flex-row gap-2 mt-4">

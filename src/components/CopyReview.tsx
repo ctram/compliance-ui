@@ -46,7 +46,7 @@ export function CopyReview({
 
   return (
     <div className=" p-4 flex flex-col items-center">
-      <div className="text-lg font-bold mb-8">Copy Review</div>
+      <div className="text-xl font-bold mb-8">Copy Review</div>
       <div className="w-2/3 leading-14">{workingCopy}</div>
       {approvedMsg}
       <div className="flex flex-row gap-2 mt-4">{actionButtons}</div>
