@@ -6,8 +6,8 @@ import { extractTextFromReactElements } from "@/utils/extract-text-from-react-el
 function CopyReviewWrapper({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col">
-      <div className="text-xl font-bold mb-8">Copy Review</div>
-      <div className="flex flex-col">{children}</div>
+      <div className="text-xl font-bold mb-8 text-center">Copy Review</div>
+      <div className="flex flex-col items-center">{children}</div>
     </div>
   );
 }

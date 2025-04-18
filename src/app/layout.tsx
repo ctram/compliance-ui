@@ -30,7 +30,7 @@ export default function RootLayout({
         <title>Compliance Review</title>
       </head>
 
-      <body className={`${geistSans.variable} ${geistMono.variable} p-20 `}>
+      <body className={`${geistSans.variable} ${geistMono.variable} py-20 `}>
         <main className="">{children}</main>
       </body>
     </html>

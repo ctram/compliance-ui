@@ -236,7 +236,7 @@ export default function Page() {
   const inner =
     hasDataLoaded && chosenSuggestions ? (
       <div className="flex ">
-        <div className="w-1/2 border-r border-gray-200 left-panel">
+        <div className="w-1/2 border-r border-gray-200 px-40 left-panel">
           <CopyReview
             workingCopy={workingCopy}
             hasApproved={hasApproved}
@@ -252,7 +252,7 @@ export default function Page() {
             onDoubleClickParagraph={handleDoubleClickParagraph}
           />
         </div>
-        <div className="w-1/2 right-panel">{rightPanel}</div>
+        <div className="w-1/2 px-40 right-panel">{rightPanel}</div>
       </div>
     ) : (
       "Loading..."

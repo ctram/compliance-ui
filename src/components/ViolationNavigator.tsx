@@ -14,11 +14,11 @@ export function ViolationNavigator({
   onClickNext: () => void;
 }) {
   return (
-    <div className="rounded-mdtext-center flex flex-colmy-6 violation-navigator">
-      <div className="text-xl font-bold">
+    <div className="rounded-mdtext-center flex flex-col items-center violation-navigator">
+      <div className="text-xl font-bold text-center">
         Violation {idxOfCurrViolation + 1} of {numViolations}
       </div>
-      <div className="flex flex-row gap-2 mt-4">
+      <div className="flex flex-row gap-2 mt-4 ">
         <ActionButton text="Prev" onClick={onClickPrev} />
         <ActionButton text="Next" onClick={onClickNext} />
       </div>

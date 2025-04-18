@@ -33,7 +33,7 @@ export function ViolationSuggestionsPanel({
         onClickNext={onClickNext}
 
       />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mt-8">
         {violationInView && (
           <SuggestionPanel
             violation={violationInView}
