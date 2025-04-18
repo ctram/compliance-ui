@@ -115,10 +115,10 @@ export default function Page() {
     const classNameIfApproved = '"p-1"';
     const classNameForViolationInView = hasApproved
       ? classNameIfApproved
-      : "hover:cursor-pointer p-1  border-b-3 border-black-800";
+      : "hover:cursor-pointer p-1 border-b-[3px] border-gray-800";
     const classNameForViolationNotInView = hasApproved
       ? classNameIfApproved
-      : "hover:cursor-pointer p-1  border-b-1 border-black-200";
+      : "hover:cursor-pointer p-1 border-b border-gray-200";
 
     const updatedMarkup = markupOriginalCopy({
       originalCopy,

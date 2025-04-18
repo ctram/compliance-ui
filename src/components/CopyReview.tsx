@@ -88,7 +88,7 @@ export function CopyReview({
   return (
     <CopyReviewWrapper>
       {!isManualEditMode && (
-        <div className="leading-14" onDoubleClick={onDoubleClickParagraph}>
+        <div className="leading-[3.5rem]" onDoubleClick={onDoubleClickParagraph}>
           {workingCopy}
         </div>
       )}
