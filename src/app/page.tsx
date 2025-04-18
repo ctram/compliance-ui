@@ -11,7 +11,7 @@ import { ChosenSuggestions } from "../utils/get-initial-chosen-suggestions";
 import { getInitialChosenSuggestions } from "@/utils/get-initial-chosen-suggestions";
 import { getSourceSentence } from "@/utils/get-source-sentence";
 import { getStartAndEndIdxOfSubstring } from "@/utils/get-start-and-end-idx-of-substring";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { markupOriginalCopy } from "@/utils/markup-original-copy";
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -91,12 +91,12 @@ export default function Page() {
     }, 1000);
   }, []);
 
-  const handleClickSentence = (violationId: string) => {
+  const handleClickSentence = useCallback((violationId: string) => {
     const violationIdx = violationSuggestions.findIndex(
       (violation) => violation.id === violationId
     );
     setCurrViolationIdx(violationIdx);
-  };
+  }, [violationSuggestions]);
 
   /**
    * highlight original fragments and suggestions within the working copy
