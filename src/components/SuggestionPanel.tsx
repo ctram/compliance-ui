@@ -103,7 +103,7 @@ export function SuggestionPanel({
   );
 
   return (
-    <div className="bg-white rounded-lg p-6 grid gap-y-8">
+    <div className="bg-white rounded-lg grid gap-y-8">
       <div className="grid gap-y-4 border border-gray-200 rounded-md p-4 ">
         <div>
           <div className="text-base font-semibold">Severity</div>
@@ -128,7 +128,7 @@ export function SuggestionPanel({
         <div className="text-xl font-semibold my-4">Decide What To Do</div>
         <div className="flex flex-col gap-y-8">
           <div>
-            <div className="text-base font-semibold my-4">Use Original</div>
+            <div className="text-base font-semibold my-4">Keep Original</div>
             {wrappedOriginalSentenceEl}
           </div>
           <div>

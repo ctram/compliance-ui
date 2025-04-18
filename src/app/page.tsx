@@ -179,7 +179,7 @@ export default function Page() {
     setShowOriginalText(!showOriginalText);
   };
 
-  const leftPanel = hasApproved ? (
+  const rightPanel = hasApproved ? (
     <div className="p-4 flex flex-col items-center">
       <div className="text-xl font-bold mb-4">Copy has been approved</div>
       <p className="text-sm text-gray-500">
@@ -203,8 +203,8 @@ export default function Page() {
 
   const inner =
     hasDataLoaded && chosenSuggestions ? (
-      <div className="flex h-full">
-        <div className="w-1/2 shadow-md">
+      <div className="flex min-h-screen">
+        <div className="w-1/2 border-r border-gray-200">
           <CopyReview
             workingCopy={workingCopy}
             hasApproved={hasApproved}
@@ -216,14 +216,14 @@ export default function Page() {
             onClickShowOriginalText={handleToggleOriginalText}
           />
         </div>
-        <div className="w-1/2 shadow-md">{leftPanel}</div>
+        <div className="w-1/2 pl-20">{rightPanel}</div>
       </div>
     ) : (
       "Loading..."
     );
 
   return (
-    <div className="flex flex-col items-center h-full">
+    <div className="flex flex-col items-center min-h-screen">
       <h1 className="text-2xl font-bold mb-8">Compliance Review</h1>
       {inner}
     </div>

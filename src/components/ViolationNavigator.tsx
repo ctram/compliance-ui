@@ -14,7 +14,7 @@ export function ViolationNavigator({
   onClickNext: () => void;
 }) {
   return (
-    <div className="rounded-md p-4 text-center flex flex-col items-center">
+    <div className="rounded-mdtext-center flex flex-col items-center my-6">
       <div className="text-xl font-bold">
         Violation {idxOfCurrViolation + 1} of {numViolations}
       </div>

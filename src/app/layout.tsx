@@ -31,9 +31,11 @@ export default function RootLayout({
       </head>
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-ful`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen p-20 overflow-x-hidden`}
       >
-        {children}
+        <main className="max-w-full min-h-screen">
+          {children}
+        </main>
       </body>
     </html>
   );
