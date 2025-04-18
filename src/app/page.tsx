@@ -236,6 +236,10 @@ export default function Page() {
 
   // Handle double clicking a paragraph in the left panel.
   const handleDoubleClickParagraph = () => {
+    if (hasApproved) {
+      return;
+    }
+
     if (didManualEdit) {
       setWorkingCopy(editedCopy);
     } else {

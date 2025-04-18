@@ -80,21 +80,26 @@ export function CopyReview({
   );
 
   const approvedMsg = hasApproved ? (
-    <div className="text-green-700 text-center mb-4 font-bold">
+    <div className="text-green-700 text-center m-4 font-bold">
       Copy has been approved. <span className="text-green-700">&#x2714;</span>
     </div>
   ) : null;
 
   return (
     <CopyReviewWrapper>
-      <div
-        className="leading-14 w-full whitespace-pre-wrap"
-        onDoubleClick={onDoubleClickParagraph}
-      >
-        {workingCopy}
-      </div>
+      {!isManualEditMode && (
+        <div className="leading-14" onDoubleClick={onDoubleClickParagraph}>
+          {workingCopy}
+        </div>
+      )}
       {approvedMsg}
-      <div className="flex flex-row gap-2 mt-4">{actionButtons}</div>
+      <div className="flex flex-row gap-2 mt-6">{actionButtons}</div>
+      {!hasApproved && (
+        <div className="mt-10 text-md text-gray-400">
+          To manually edit the copy, double click on any text that is not a
+          violation. Violations are underlined.
+        </div>
+      )}
     </CopyReviewWrapper>
   );
 }
