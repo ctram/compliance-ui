@@ -95,4 +95,4 @@ The project uses Next.js with the App Router and TypeScript. Components are buil
 - Support reviewing multiple copy instances.
 - Violation category filtering.
 - Batch approval workflow.
-- Review history and audit trai.l
+- Review history and audit trail.
