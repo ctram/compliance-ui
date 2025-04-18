@@ -9,6 +9,8 @@ export function CopyReview({
   onReset,
   onCancelApproval,
   onNext,
+  showOriginalText,
+  onClickShowOriginalText,
 }: {
   workingCopy: React.ReactNode;
   hasApproved: boolean;
@@ -16,6 +18,8 @@ export function CopyReview({
   onReset: () => void;
   onCancelApproval: () => void;
   onNext: () => void;
+  showOriginalText: boolean;
+  onClickShowOriginalText: () => void;
 }) {
   const [content, setContent] = useState<React.ReactNode>("Loading...");
 
@@ -25,14 +29,26 @@ export function CopyReview({
     }
   }, [workingCopy]);
 
+  const toggleOriginalTextButton = showOriginalText
+    ? "Hide Original Text"
+    : "Show Original Text";
+
   const actionButtons = hasApproved ? (
     <>
       <ActionButton text="Cancel Approval" onClick={onCancelApproval} />
+      <ActionButton
+        text={toggleOriginalTextButton}
+        onClick={onClickShowOriginalText}
+      />
       <ActionButton text="Next" onClick={onNext} />
     </>
   ) : (
     <>
       <ActionButton text="Approve" onClick={onApprove} />
+      <ActionButton
+        text={toggleOriginalTextButton}
+        onClick={onClickShowOriginalText}
+      />
       <ActionButton text="Reset" onClick={onReset} />
     </>
   );

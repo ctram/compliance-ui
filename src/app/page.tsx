@@ -25,7 +25,7 @@ export default function Page() {
   >([]);
   const [idxOfCurrViolation, setCurrViolationIdx] = useState(0);
   const [hasApproved, setHasApproved] = useState(false);
-
+  const [showOriginalText, setShowOriginalText] = useState(false);
   const [chosenSuggestions, setChosenSuggestions] =
     useState<ChosenSuggestions>();
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
@@ -103,6 +103,7 @@ export default function Page() {
       idOfCurrViolation: violationSuggestions[idxOfCurrViolation].id,
       classNameForViolationInView,
       classNameForViolationNotInView,
+      showOriginalText,
     });
 
     setWorkingCopy(updatedMarkup);
@@ -112,6 +113,7 @@ export default function Page() {
     violationSuggestions,
     idxOfCurrViolation,
     hasApproved,
+    showOriginalText,
   ]);
 
   const handleClickPrev = () => {
@@ -173,6 +175,10 @@ export default function Page() {
     toast.success("There are no more violations to review.");
   };
 
+  const handleToggleOriginalText = () => {
+    setShowOriginalText(!showOriginalText);
+  };
+
   const leftPanel = hasApproved ? (
     <div className="p-4 flex flex-col items-center">
       <div className="text-xl font-bold mb-4">Copy has been approved</div>
@@ -206,6 +212,8 @@ export default function Page() {
             onReset={handleReset}
             onCancelApproval={handleCancelApproval}
             onNext={handleNext}
+            showOriginalText={showOriginalText}
+            onClickShowOriginalText={handleToggleOriginalText}
           />
         </div>
         <div className="w-1/2 shadow-md">{leftPanel}</div>

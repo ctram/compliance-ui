@@ -5,7 +5,6 @@ import React from "react";
 import { adjustCasing } from "./adjust-casing";
 import { removeEndingPunctuation } from "./remove-ending-punctuation";
 
-
 export function markupOriginalCopy({
   originalCopy,
   violationSuggestions,
@@ -14,6 +13,7 @@ export function markupOriginalCopy({
   idOfCurrViolation,
   classNameForViolationInView,
   classNameForViolationNotInView,
+  showOriginalText,
 }: {
   originalCopy: string;
   violationSuggestions: ComplianceViolation[];
@@ -22,6 +22,7 @@ export function markupOriginalCopy({
   idOfCurrViolation: string;
   classNameForViolationInView: string;
   classNameForViolationNotInView: string;
+  showOriginalText: boolean;
 }): React.ReactNode {
   // Create a simple array of text segments and React elements
   const segments: (string | React.ReactNode)[] = [];
@@ -89,17 +90,21 @@ export function markupOriginalCopy({
       // Always remove ending punctuation from suggestions
       const processedSuggestion = removeEndingPunctuation(adjustedSuggestion);
 
-      segments.push(
+      const sentenceEl = (
         <span
           className={classNameForSentence}
           onClick={() => onClickSentence(violation.id)}
         >
           {before}
-          <span className="bg-red-200 line-through">{originalFragment}</span>
+          {showOriginalText && (
+            <span className="bg-red-200 line-through">{originalFragment}</span>
+          )}
           <span className="bg-green-200">{processedSuggestion}</span>
           {after}
         </span>
       );
+
+      segments.push(sentenceEl);
     } else {
       // Create React elements for the highlighted original sentence
       const {
@@ -110,7 +115,7 @@ export function markupOriginalCopy({
       const before = innerSourceSentence.slice(0, startIdxOfOriginalFragment);
       const after = innerSourceSentence.slice(endIdxOfOriginalFragment);
 
-      segments.push(
+      const sentenceEl = (
         <span
           className={classNameForSentence}
           onClick={() => onClickSentence(violation.id)}
@@ -120,6 +125,8 @@ export function markupOriginalCopy({
           {after}
         </span>
       );
+
+      segments.push(sentenceEl);
     }
 
     // Update currentText to remove the processed sentence
