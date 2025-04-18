@@ -141,6 +141,7 @@ export default function Page() {
     showOriginalText,
     isManualEditMode,
     didManualEdit,
+    handleClickSentence
   ]);
 
   // Handle clicking the PREVIOUS button in the violation panel i.e right panel
