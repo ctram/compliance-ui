@@ -103,7 +103,7 @@ export function SuggestionPanel({
   );
 
   return (
-    <div key={violation.id} className="bg-white rounded-lg p-6 grid gap-y-8">
+    <div className="bg-white rounded-lg p-6 grid gap-y-8">
       <div className="grid gap-y-4 border border-gray-200 rounded-md p-4 ">
         <div>
           <div className="text-base font-semibold">Severity</div>

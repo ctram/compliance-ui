@@ -92,6 +92,7 @@ export function markupOriginalCopy({
 
       const sentenceEl = (
         <span
+          key={`sentence-${violation.id}`}
           className={classNameForSentence}
           onClick={() => onClickSentence(violation.id)}
         >
@@ -117,6 +118,7 @@ export function markupOriginalCopy({
 
       const sentenceEl = (
         <span
+          key={`sentence-${violation.id}`}
           className={classNameForSentence}
           onClick={() => onClickSentence(violation.id)}
         >
@@ -135,8 +137,16 @@ export function markupOriginalCopy({
 
   // Add any remaining text
   if (currentText) {
-    segments.push(currentText);
+    segments.push(<span key="remaining">{currentText}</span>);
   }
 
-  return <>{segments}</>;
+  // Also need to wrap any plain string segments at the start
+  const processedSegments = segments.map((segment, index) => {
+    if (typeof segment === 'string') {
+      return <span key={`text-${index}`}>{segment}</span>;
+    }
+    return segment;
+  });
+
+  return <>{processedSegments}</>;
 }

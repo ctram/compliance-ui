@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import React from "react";
 import { ActionButton } from "./ActionButton";
 
@@ -21,14 +20,6 @@ export function CopyReview({
   showOriginalText: boolean;
   onClickShowOriginalText: () => void;
 }) {
-  const [content, setContent] = useState<React.ReactNode>("Loading...");
-
-  useEffect(() => {
-    if (workingCopy !== content) {
-      setContent(workingCopy);
-    }
-  }, [workingCopy]);
-
   const toggleOriginalTextButton = showOriginalText
     ? "Hide Original Text"
     : "Show Original Text";
@@ -36,19 +27,13 @@ export function CopyReview({
   const actionButtons = hasApproved ? (
     <>
       <ActionButton text="Cancel Approval" onClick={onCancelApproval} />
-      <ActionButton
-        text={toggleOriginalTextButton}
-        onClick={onClickShowOriginalText}
-      />
+      <ActionButton text={toggleOriginalTextButton} onClick={onClickShowOriginalText} />
       <ActionButton text="Next" onClick={onNext} />
     </>
   ) : (
     <>
       <ActionButton text="Approve" onClick={onApprove} />
-      <ActionButton
-        text={toggleOriginalTextButton}
-        onClick={onClickShowOriginalText}
-      />
+      <ActionButton text={toggleOriginalTextButton} onClick={onClickShowOriginalText} />
       <ActionButton text="Reset" onClick={onReset} />
     </>
   );
@@ -62,7 +47,7 @@ export function CopyReview({
   return (
     <div className=" p-4 flex flex-col items-center">
       <div className="text-lg font-bold mb-8">Copy Review</div>
-      <div className="w-2/3 leading-14">{content}</div>
+      <div className="w-2/3 leading-14">{workingCopy}</div>
       {approvedMsg}
       <div className="flex flex-row gap-2 mt-4">{actionButtons}</div>
     </div>
