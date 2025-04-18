@@ -14,7 +14,7 @@ import { getStartAndEndIdxOfSubstring } from "@/utils/get-start-and-end-idx-of-s
 import { useState, useEffect } from "react";
 import { markupOriginalCopy } from "@/utils/markup-original-copy";
 import React from "react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import RightPanel from "@/components/RightPanel";
 
 export default function Page() {
@@ -144,7 +144,7 @@ export default function Page() {
   ]);
 
   // Handle clicking the PREVIOUS button in the violation panel i.e right panel
-  const handleClickPrev = () => {
+  const handleClickPrevViolation = () => {
     const prevIdx =
       (idxOfCurrViolation - 1 + violationSuggestions.length) %
       violationSuggestions.length;
@@ -153,7 +153,7 @@ export default function Page() {
   };
 
   // Handle clicking the NEXT button in the violation panel i.e right panel
-  const handleClickNext = () => {
+  const handleClickNextViolation = () => {
     const nextIdx = (idxOfCurrViolation + 1) % violationSuggestions.length;
     setCurrViolationIdx(nextIdx);
   };
@@ -211,7 +211,7 @@ export default function Page() {
   // Handle moving to the next copy.
   // Since this is a demo, we'll only review a single
   // copy.
-  const handleNext = () => {
+  const handleClickNextCopy = () => {
     toast.success("There are no more violations to review.");
   };
 
@@ -257,7 +257,7 @@ export default function Page() {
               onApprove={handleApprove}
               onReset={handleReset}
               onCancelApproval={handleCancelApproval}
-              onNext={handleNext}
+              onNextCopy={handleClickNextCopy}
               showOriginalText={showOriginalText}
               onClickShowOriginalText={handleToggleOriginalText}
               isManualEditMode={isManualEditMode}
@@ -274,8 +274,8 @@ export default function Page() {
             hasApproved={hasApproved}
             chosenSuggestions={chosenSuggestions}
             violationSuggestions={violationSuggestions}
-            onClickPrev={handleClickPrev}
-            onClickNext={handleClickNext}
+            onClickPrev={handleClickPrevViolation}
+            onClickNext={handleClickNextViolation}
             onChooseSuggestion={handleChooseSuggestion}
             idxOfCurrViolation={idxOfCurrViolation}
           />
@@ -287,6 +287,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col page">
+      <Toaster position="top-center" />
       <h1 className="text-2xl font-bold mb-8 text-center">Compliance Review</h1>
       {inner}
     </div>

@@ -18,7 +18,7 @@ export function CopyReview({
   onApprove,
   onReset,
   onCancelApproval,
-  onNext,
+  onNextCopy,
   showOriginalText,
   onClickShowOriginalText,
   isManualEditMode,
@@ -31,7 +31,7 @@ export function CopyReview({
   onApprove: () => void;
   onReset: () => void;
   onCancelApproval: () => void;
-  onNext: () => void;
+  onNextCopy: () => void;
   showOriginalText: boolean;
   onClickShowOriginalText: () => void;
   isManualEditMode: boolean;
@@ -66,7 +66,7 @@ export function CopyReview({
         text={toggleOriginalTextButton}
         onClick={onClickShowOriginalText}
       />
-      <ActionButton text="Next" onClick={onNext} />
+      <ActionButton text="Next Copy" onClick={onNextCopy} />
     </>
   ) : (
     <>
