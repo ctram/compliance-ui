@@ -1,5 +1,3 @@
-
-
 export function getSeverityColor(severity: string) {
   switch (severity.toLowerCase()) {
     case "high":

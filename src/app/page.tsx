@@ -42,34 +42,24 @@ export default function Page() {
       const violations = getComplianceViolations();
       const suggestions = getSuggestions();
 
-      const violationSuggestions = violations.map((violation) => {
+      const innerViolationSuggestions = violations.map((violation) => {
         const { startIdx } = getStartAndEndIdxOfSubstring(
           violation.text,
           innerOriginalCopy
         );
         const originalSentence = getSourceSentence(startIdx, innerOriginalCopy);
 
-        const {
-          startIdx: startIdxOfOriginalFragment,
-          endIdx: endIdxOfOriginalFragment,
-        } = getStartAndEndIdxOfSubstring(violation.text, innerOriginalCopy);
-
-        /**
-         * I think the default 'start' and 'end' field values are incorrect
-         * or I'm misunderstanding how to use them, so updating them here
-         */
         return {
           ...violation,
-          start: startIdxOfOriginalFragment,
-          end: endIdxOfOriginalFragment,
           suggestions: suggestions[violation.id] || [],
           originalSentence,
         };
       });
-      setViolationSuggestions(violationSuggestions);
+      setViolationSuggestions(innerViolationSuggestions);
 
-      const initialChosenSuggestions =
-        getInitialChosenSuggestions(violationSuggestions);
+      const initialChosenSuggestions = getInitialChosenSuggestions(
+        innerViolationSuggestions
+      );
       setChosenSuggestions(initialChosenSuggestions);
       setHasDataLoaded(true);
     }, 1000);
@@ -204,7 +194,6 @@ export default function Page() {
     setEditedCopy(text);
     setDidManualEdit(true);
   };
-
 
   const handleCancelManualEdit = () => {
     setIsManualEditMode(false);

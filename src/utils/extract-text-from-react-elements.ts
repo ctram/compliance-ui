@@ -1,4 +1,5 @@
 import React from "react";
+
 /**
  * Given a root React element, extract the text from all of the
  * child elements, ignoring React elements themselves e.g. spans, divs, etc.

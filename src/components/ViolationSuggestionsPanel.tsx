@@ -5,7 +5,6 @@ import { SuggestionPanel } from "./SuggestionPanel";
 import { ViolationNavigator } from "./ViolationNavigator";
 import { ChosenSuggestions } from "@/utils/get-initial-chosen-suggestions";
 
-
 export function ViolationSuggestionsPanel({
   violationSuggestions,
   onClickPrev,
