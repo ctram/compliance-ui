@@ -165,6 +165,9 @@ export default function Page() {
 
   const handleReset = () => {
     setHasApproved(false);
+    setDidManualEdit(false);
+    setIsManualEditMode(false);
+    setEditedCopy("");
     const initialChosenSuggestions =
       getInitialChosenSuggestions(violationSuggestions);
     setChosenSuggestions(initialChosenSuggestions);
@@ -192,11 +195,16 @@ export default function Page() {
   };
 
   const handleSaveManualEdit = (text: string) => {
+    console.log({
+      textThatWasManuallyEdited: text,
+    });
+
     setIsManualEditMode(false);
     setWorkingCopy(text);
     setEditedCopy(text);
     setDidManualEdit(true);
   };
+
 
   const handleCancelManualEdit = () => {
     setIsManualEditMode(false);

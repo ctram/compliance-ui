@@ -87,7 +87,10 @@ export function CopyReview({
 
   return (
     <CopyReviewWrapper>
-      <div className="leading-14 w-full" onDoubleClick={onDoubleClickParagraph}>
+      <div
+        className="leading-14 w-full whitespace-pre-wrap"
+        onDoubleClick={onDoubleClickParagraph}
+      >
         {workingCopy}
       </div>
       {approvedMsg}
