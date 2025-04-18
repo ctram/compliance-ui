@@ -11,8 +11,8 @@ export default function RootLayout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Compliance Review</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
+        <script src="https://cdn.tailwindcss.com" defer></script>
+        <script defer>
           {`
             tailwind.config = {
               darkMode: 'media',
