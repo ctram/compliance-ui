@@ -30,15 +30,15 @@ export function markupOriginalCopy({
 
   // Process each violation in order of appearance in the text
   const sortedViolations = [...violationSuggestions].sort((a, b) => {
-    const posA = originalCopy.indexOf(a.sourceSentence || "");
-    const posB = originalCopy.indexOf(b.sourceSentence || "");
+    const posA = originalCopy.indexOf(a.originalSentence || "");
+    const posB = originalCopy.indexOf(b.originalSentence || "");
     return posA - posB;
   });
 
   for (const violation of sortedViolations) {
     const {
       suggestions,
-      sourceSentence,
+      originalSentence,
       text: originalFragment,
       id,
     } = violation;
@@ -47,7 +47,7 @@ export function markupOriginalCopy({
       ? classNameForViolationInView
       : classNameForViolationNotInView;
     const innerSuggestions: string[] = suggestions || [];
-    const innerSourceSentence = sourceSentence || "";
+    const innerSourceSentence = originalSentence || "";
 
     // Find the position of this sentence in the current text
     const sentencePos = currentText.indexOf(innerSourceSentence);

@@ -12,7 +12,7 @@ export type ComplianceViolation = {
   message: string;
   severity: string;
   suggestions?: string[];
-  sourceSentence?: string;
+  originalSentence?: string;
   startIdxOfOriginalFragment?: number;
   endIdxOfOriginalFragment?: number;
 };

@@ -47,7 +47,7 @@ export default function Page() {
           violation.text,
           innerOriginalCopy
         );
-        const sourceSentence = getSourceSentence(startIdx, innerOriginalCopy);
+        const originalSentence = getSourceSentence(startIdx, innerOriginalCopy);
 
         const {
           startIdx: startIdxOfOriginalFragment,
@@ -63,7 +63,7 @@ export default function Page() {
           start: startIdxOfOriginalFragment,
           end: endIdxOfOriginalFragment,
           suggestions: suggestions[violation.id] || [],
-          sourceSentence,
+          originalSentence,
         };
       });
       setViolationSuggestions(violationSuggestions);

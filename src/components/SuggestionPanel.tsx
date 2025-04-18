@@ -6,6 +6,7 @@ import { getStartAndEndIdxOfSubstring } from "@/utils/get-start-and-end-idx-of-s
 import { HighlightedSentence } from "./HighlightedSentence";
 import { ChosenSuggestions } from "@/utils/get-initial-chosen-suggestions";
 import { getSeverityColor } from "@/utils/get-severity-color";
+import { removeEndingPunctuation } from "@/utils/remove-ending-punctuation";
 
 export function SuggestionPanel({
   violation,
@@ -24,7 +25,7 @@ export function SuggestionPanel({
 
   const {
     text: fragmentOfOriginalSentence,
-    sourceSentence,
+    originalSentence,
     suggestions,
     id,
     type,
@@ -32,7 +33,7 @@ export function SuggestionPanel({
     severity,
   } = violation;
 
-  if (!sourceSentence) {
+  if (!originalSentence) {
     return <div>No source sentence found</div>;
   }
   if (!suggestions || suggestions.length === 0) {
@@ -41,7 +42,7 @@ export function SuggestionPanel({
 
   const { startIdx, endIdx } = getStartAndEndIdxOfSubstring(
     fragmentOfOriginalSentence,
-    sourceSentence
+    originalSentence
   );
 
   const baseClassName = "rounded-md p-4 hover:cursor-pointer";
@@ -56,6 +57,7 @@ export function SuggestionPanel({
     const finalClassName = isSelected
       ? `${baseClassName} ${selectedClassName}`
       : `${baseClassName} ${notSelectedClassName}`;
+    const processedSuggestion = removeEndingPunctuation(suggestion);
 
     return (
       <div
@@ -64,10 +66,10 @@ export function SuggestionPanel({
         onClick={() => onChooseSuggestion(id, false, i)}
       >
         <Suggestion
-          originalSentence={sourceSentence}
+          originalSentence={originalSentence}
           strikeOutStartIdx={startIdx}
           strikeOutEndIdx={endIdx}
-          suggestion={suggestion}
+          suggestion={processedSuggestion}
         />
       </div>
     );
@@ -78,7 +80,7 @@ export function SuggestionPanel({
     : `${baseClassName} ${notSelectedClassName}`;
   const originalSentenceEl = (
     <HighlightedSentence
-      originalSentence={sourceSentence}
+      originalSentence={originalSentence}
       highlightStartIdx={startIdx}
       highlightEndIdx={endIdx}
       highlightColor="bg-yellow-200"
