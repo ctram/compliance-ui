@@ -172,6 +172,8 @@ export default function Page() {
 
   const handleCancelApproval = () => {
     setHasApproved(false);
+    setDidManualEdit(false);
+    setIsManualEditMode(false);
     const initialChosenSuggestions =
       getInitialChosenSuggestions(violationSuggestions);
     setChosenSuggestions(initialChosenSuggestions);
