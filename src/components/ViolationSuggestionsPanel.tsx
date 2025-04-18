@@ -25,7 +25,7 @@ export function ViolationSuggestionsPanel({
   const violationInView = violationSuggestions[idxOfViolationBeingViewed];
 
   return (
-    <div >
+    <div className="violation-suggestions-panel">
       <ViolationNavigator
         numViolations={numViolations}
         idxOfCurrViolation={idxOfViolationBeingViewed}

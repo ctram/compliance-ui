@@ -23,19 +23,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-screen">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Compliance Review</title>
       </head>
 
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen p-20 overflow-x-hidden`}
-      >
-        <main className="max-w-full min-h-screen">
-          {children}
-        </main>
+      <body className={`${geistSans.variable} ${geistMono.variable} p-20 `}>
+        <main className="">{children}</main>
       </body>
     </html>
   );

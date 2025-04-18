@@ -27,9 +27,6 @@ export function SuggestionPanel({
     sourceSentence,
     suggestions,
     id,
-    start,
-    end,
-    length,
     type,
     message,
     severity,
@@ -103,7 +100,7 @@ export function SuggestionPanel({
   );
 
   return (
-    <div className="bg-white rounded-lg grid gap-y-8">
+    <div className="bg-white rounded-lg grid gap-y-8 suggestion-panel">
       <div className="grid gap-y-4 border border-gray-200 rounded-md p-4 ">
         <div>
           <div className="text-base font-semibold">Severity</div>

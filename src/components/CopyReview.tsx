@@ -1,5 +1,16 @@
 import React from "react";
 import { ActionButton } from "./ActionButton";
+import { TextEditor } from "./TextEditor";
+import { extractTextFromReactElements } from "@/utils/extract-text-from-react-elements";
+
+function CopyReviewWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="p-4 flex flex-col">
+      <div className="text-xl font-bold mb-8">Copy Review</div>
+      <div className="flex flex-col">{children}</div>
+    </div>
+  );
+}
 
 export function CopyReview({
   workingCopy,
@@ -10,6 +21,10 @@ export function CopyReview({
   onNext,
   showOriginalText,
   onClickShowOriginalText,
+  isManualEditMode,
+  onSaveManualEdit,
+  onCancelManualEdit,
+  onDoubleClickParagraph,
 }: {
   workingCopy: React.ReactNode;
   hasApproved: boolean;
@@ -19,7 +34,27 @@ export function CopyReview({
   onNext: () => void;
   showOriginalText: boolean;
   onClickShowOriginalText: () => void;
+  isManualEditMode: boolean;
+  onSaveManualEdit: (text: string) => void;
+  onCancelManualEdit: () => void;
+  onDoubleClickParagraph: () => void;
 }) {
+  if (isManualEditMode) {
+    const text = extractTextFromReactElements(workingCopy);
+
+    return (
+      <CopyReviewWrapper>
+        <div className="h-[50vh]">
+          <TextEditor
+            initialText={text}
+            onClickSave={onSaveManualEdit}
+            onClickCancel={onCancelManualEdit}
+          />
+        </div>
+      </CopyReviewWrapper>
+    );
+  }
+
   const toggleOriginalTextButton = showOriginalText
     ? "Hide Original Text"
     : "Show Original Text";
@@ -27,13 +62,19 @@ export function CopyReview({
   const actionButtons = hasApproved ? (
     <>
       <ActionButton text="Cancel Approval" onClick={onCancelApproval} />
-      <ActionButton text={toggleOriginalTextButton} onClick={onClickShowOriginalText} />
+      <ActionButton
+        text={toggleOriginalTextButton}
+        onClick={onClickShowOriginalText}
+      />
       <ActionButton text="Next" onClick={onNext} />
     </>
   ) : (
     <>
       <ActionButton text="Approve" onClick={onApprove} />
-      <ActionButton text={toggleOriginalTextButton} onClick={onClickShowOriginalText} />
+      <ActionButton
+        text={toggleOriginalTextButton}
+        onClick={onClickShowOriginalText}
+      />
       <ActionButton text="Reset" onClick={onReset} />
     </>
   );
@@ -45,11 +86,12 @@ export function CopyReview({
   ) : null;
 
   return (
-    <div className=" p-4 flex flex-col items-center">
-      <div className="text-xl font-bold mb-8">Copy Review</div>
-      <div className="w-2/3 leading-14">{workingCopy}</div>
+    <CopyReviewWrapper>
+      <div className="leading-14" onDoubleClick={onDoubleClickParagraph}>
+        {workingCopy}
+      </div>
       {approvedMsg}
       <div className="flex flex-row gap-2 mt-4">{actionButtons}</div>
-    </div>
+    </CopyReviewWrapper>
   );
 }

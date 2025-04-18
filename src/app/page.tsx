@@ -29,6 +29,9 @@ export default function Page() {
   const [chosenSuggestions, setChosenSuggestions] =
     useState<ChosenSuggestions>();
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
+  const [isManualEditMode, setIsManualEditMode] = useState(false);
+  const [didManualEdit, setDidManualEdit] = useState(false);
+  const [editedCopy, setEditedCopy] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
@@ -83,7 +86,12 @@ export default function Page() {
    * highlight fragments within the original paragraph
    */
   useEffect(() => {
-    if (violationSuggestions.length === 0 || !chosenSuggestions) {
+    if (
+      violationSuggestions.length === 0 ||
+      !chosenSuggestions ||
+      isManualEditMode ||
+      didManualEdit
+    ) {
       return;
     }
 
@@ -114,6 +122,8 @@ export default function Page() {
     idxOfCurrViolation,
     hasApproved,
     showOriginalText,
+    isManualEditMode,
+    didManualEdit,
   ]);
 
   const handleClickPrev = () => {
@@ -179,6 +189,28 @@ export default function Page() {
     setShowOriginalText(!showOriginalText);
   };
 
+  const handleSaveManualEdit = (text: string) => {
+    setIsManualEditMode(false);
+    setWorkingCopy(text);
+    setEditedCopy(text);
+    setDidManualEdit(true);
+  };
+
+  const handleCancelManualEdit = () => {
+    setIsManualEditMode(false);
+  };
+
+  const handleDoubleClickParagraph = () => {
+    if (didManualEdit) {
+      setWorkingCopy(editedCopy);
+    } else {
+      setWorkingCopy(originalCopy);
+    }
+
+    setIsManualEditMode(true);
+    setDidManualEdit(false);
+  };
+
   const rightPanel = hasApproved ? (
     <div className="p-4 flex flex-col items-center">
       <div className="text-xl font-bold mb-4">Copy has been approved</div>
@@ -203,8 +235,8 @@ export default function Page() {
 
   const inner =
     hasDataLoaded && chosenSuggestions ? (
-      <div className="flex min-h-screen">
-        <div className="w-1/2 border-r border-gray-200">
+      <div className="flex ">
+        <div className="w-1/2 border-r border-gray-200 left-panel">
           <CopyReview
             workingCopy={workingCopy}
             hasApproved={hasApproved}
@@ -214,17 +246,21 @@ export default function Page() {
             onNext={handleNext}
             showOriginalText={showOriginalText}
             onClickShowOriginalText={handleToggleOriginalText}
+            isManualEditMode={isManualEditMode}
+            onSaveManualEdit={handleSaveManualEdit}
+            onCancelManualEdit={handleCancelManualEdit}
+            onDoubleClickParagraph={handleDoubleClickParagraph}
           />
         </div>
-        <div className="w-1/2 pl-20">{rightPanel}</div>
+        <div className="w-1/2 right-panel">{rightPanel}</div>
       </div>
     ) : (
       "Loading..."
     );
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
-      <h1 className="text-2xl font-bold mb-8">Compliance Review</h1>
+    <div className="flex flex-col page">
+      <h1 className="text-2xl font-bold mb-8 text-center">Compliance Review</h1>
       {inner}
     </div>
   );
