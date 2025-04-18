@@ -7,7 +7,6 @@ import {
   getSuggestions,
 } from "@/backend";
 import { CopyReview } from "@/components/CopyReview";
-import { ViolationSuggestionsPanel } from "@/components/ViolationSuggestionsPanel";
 import { ChosenSuggestions } from "../utils/get-initial-chosen-suggestions";
 import { getInitialChosenSuggestions } from "@/utils/get-initial-chosen-suggestions";
 import { getSourceSentence } from "@/utils/get-source-sentence";
@@ -16,38 +15,65 @@ import { useState, useEffect } from "react";
 import { markupOriginalCopy } from "@/utils/markup-original-copy";
 import React from "react";
 import toast from "react-hot-toast";
+import RightPanel from "@/components/RightPanel";
 
 export default function Page() {
+  // The original copy from the backend. This is used when state is reset.
   const [originalCopy, setOriginalCopy] = useState("Loading...");
+
+  // The copy that the user is currently working on
   const [workingCopy, setWorkingCopy] = useState<React.ReactNode>("Loading...");
+
+  // The violations that were found in the original copy,
+  // pulled from the backend
   const [violationSuggestions, setViolationSuggestions] = useState<
     ComplianceViolation[]
   >([]);
+
+  // The index of the violation the user is currently viewing
+  // in the right panel
   const [idxOfCurrViolation, setCurrViolationIdx] = useState(0);
+
+  // Whether the user has approved the copy with or without edits
   const [hasApproved, setHasApproved] = useState(false);
+
+  // Whether the left panel should show fragments of the original text
+  // or only the suggestions.
   const [showOriginalText, setShowOriginalText] = useState(false);
+
+  // The suggestion that the user has chosen for each violation
   const [chosenSuggestions, setChosenSuggestions] =
     useState<ChosenSuggestions>();
+
+  // Whether the data from the backend has loaded
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
+
+  // Whether the user is in manual edit mode
   const [isManualEditMode, setIsManualEditMode] = useState(false);
+
+  // Whether the user has manually edited the copy as
+  // opposed to choosing a suggestion.
   const [didManualEdit, setDidManualEdit] = useState(false);
+
+  // The copy that the user has manually edited
   const [editedCopy, setEditedCopy] = useState("");
 
+  // Load the data from the backend and set the state
   useEffect(() => {
+    // Simulate network request to backend
     setTimeout(() => {
-      const innerOriginalCopy = getCopy();
-      setOriginalCopy(innerOriginalCopy);
-      setWorkingCopy(innerOriginalCopy);
+      const copy = getCopy();
+      setOriginalCopy(copy);
+      setWorkingCopy(copy);
 
       const violations = getComplianceViolations();
       const suggestions = getSuggestions();
 
+      // Hydrate the violation suggestions with the suggestions and original sentences
+      // for convenience.
       const innerViolationSuggestions = violations.map((violation) => {
-        const { startIdx } = getStartAndEndIdxOfSubstring(
-          violation.text,
-          innerOriginalCopy
-        );
-        const originalSentence = getSourceSentence(startIdx, innerOriginalCopy);
+        const { startIdx } = getStartAndEndIdxOfSubstring(violation.text, copy);
+        const originalSentence = getSourceSentence(startIdx, copy);
 
         return {
           ...violation,
@@ -73,7 +99,8 @@ export default function Page() {
   };
 
   /**
-   * highlight fragments within the original paragraph
+   * highlight original fragments and suggestions within the working copy
+   * which is rendered in the left panel.
    */
   useEffect(() => {
     if (
@@ -116,6 +143,7 @@ export default function Page() {
     didManualEdit,
   ]);
 
+  // Handle clicking the PREVIOUS button in the violation panel i.e right panel
   const handleClickPrev = () => {
     const prevIdx =
       (idxOfCurrViolation - 1 + violationSuggestions.length) %
@@ -123,11 +151,14 @@ export default function Page() {
 
     setCurrViolationIdx(prevIdx);
   };
+
+  // Handle clicking the NEXT button in the violation panel i.e right panel
   const handleClickNext = () => {
     const nextIdx = (idxOfCurrViolation + 1) % violationSuggestions.length;
     setCurrViolationIdx(nextIdx);
   };
 
+  // Handle choosing a suggestion for a violation from the violation panel i.e right panel
   const handleChooseSuggestion = (
     violationId: string,
     isOriginalSelected: boolean | undefined,
@@ -138,7 +169,7 @@ export default function Page() {
     }
 
     const chosenSuggestionsForViolation = chosenSuggestions[violationId];
-    const newState = {
+    const modifiedChosenSuggestions = {
       ...chosenSuggestions,
       [violationId]: {
         ...chosenSuggestionsForViolation,
@@ -146,13 +177,16 @@ export default function Page() {
         isOriginalSelected,
       },
     };
-    setChosenSuggestions(newState);
+    setChosenSuggestions(modifiedChosenSuggestions);
   };
 
+  // Handle approving the copy, with or without edits
   const handleApprove = () => {
     setHasApproved(true);
   };
 
+  // Handle resetting the copy to the original state.
+  // This is available to the user BEFORE they have approved the copy.
   const handleReset = () => {
     setHasApproved(false);
     setDidManualEdit(false);
@@ -163,6 +197,8 @@ export default function Page() {
     setChosenSuggestions(initialChosenSuggestions);
   };
 
+  // Handle canceling the approval of the copy.
+  // This is available to the user AFTER they have approved the copy.
   const handleCancelApproval = () => {
     setHasApproved(false);
     setDidManualEdit(false);
@@ -172,33 +208,33 @@ export default function Page() {
     setChosenSuggestions(initialChosenSuggestions);
   };
 
+  // Handle moving to the next copy.
+  // Since this is a demo, we'll only review a single
+  // copy.
   const handleNext = () => {
-    /**
-     * Since this is a demo, we'll only review a single
-     * copy.
-     */
     toast.success("There are no more violations to review.");
   };
 
+  // Handle toggling whether to show the fragments of the original text
+  // or only the chosen suggestions.
   const handleToggleOriginalText = () => {
     setShowOriginalText(!showOriginalText);
   };
 
+  // Handle saving a manual edit.
   const handleSaveManualEdit = (text: string) => {
-    console.log({
-      textThatWasManuallyEdited: text,
-    });
-
     setIsManualEditMode(false);
     setWorkingCopy(text);
     setEditedCopy(text);
     setDidManualEdit(true);
   };
 
+  // Handle canceling a manual edit.
   const handleCancelManualEdit = () => {
     setIsManualEditMode(false);
   };
 
+  // Handle double clicking a paragraph in the left panel.
   const handleDoubleClickParagraph = () => {
     if (didManualEdit) {
       setWorkingCopy(editedCopy);
@@ -210,48 +246,40 @@ export default function Page() {
     setDidManualEdit(false);
   };
 
-  const rightPanel = hasApproved ? (
-    <div className="p-4 flex flex-col items-center">
-      <div className="text-xl font-bold mb-4">Copy Has Been Approved</div>
-      <p className="text-sm text-gray-500">
-        You can now move on to the next copy.
-      </p>
-    </div>
-  ) : (
-    <div>
-      {chosenSuggestions && (
-        <ViolationSuggestionsPanel
-          violationSuggestions={violationSuggestions}
-          onClickPrev={handleClickPrev}
-          onClickNext={handleClickNext}
-          onChooseSuggestion={handleChooseSuggestion}
-          chosenSuggestions={chosenSuggestions}
-          idxOfViolationBeingViewed={idxOfCurrViolation}
-        />
-      )}
-    </div>
-  );
-
   const inner =
     hasDataLoaded && chosenSuggestions ? (
       <div className="flex ">
-        <div className="w-1/2 border-r border-gray-200 px-40 left-panel">
-          <CopyReview
-            workingCopy={workingCopy}
-            hasApproved={hasApproved}
-            onApprove={handleApprove}
-            onReset={handleReset}
-            onCancelApproval={handleCancelApproval}
-            onNext={handleNext}
-            showOriginalText={showOriginalText}
-            onClickShowOriginalText={handleToggleOriginalText}
+        <div className="w-1/2 border-r border-gray-200 px-40">
+          <div className="left-panel">
+            <CopyReview
+              workingCopy={workingCopy}
+              hasApproved={hasApproved}
+              onApprove={handleApprove}
+              onReset={handleReset}
+              onCancelApproval={handleCancelApproval}
+              onNext={handleNext}
+              showOriginalText={showOriginalText}
+              onClickShowOriginalText={handleToggleOriginalText}
+              isManualEditMode={isManualEditMode}
+              onSaveManualEdit={handleSaveManualEdit}
+              onCancelManualEdit={handleCancelManualEdit}
+              onDoubleClickParagraph={handleDoubleClickParagraph}
+            />
+          </div>
+        </div>
+        <div className="w-1/2 px-40">
+          <RightPanel
             isManualEditMode={isManualEditMode}
-            onSaveManualEdit={handleSaveManualEdit}
-            onCancelManualEdit={handleCancelManualEdit}
-            onDoubleClickParagraph={handleDoubleClickParagraph}
+            didManualEdit={didManualEdit}
+            hasApproved={hasApproved}
+            chosenSuggestions={chosenSuggestions}
+            violationSuggestions={violationSuggestions}
+            onClickPrev={handleClickPrev}
+            onClickNext={handleClickNext}
+            onChooseSuggestion={handleChooseSuggestion}
+            idxOfCurrViolation={idxOfCurrViolation}
           />
         </div>
-        <div className="w-1/2 px-40 right-panel">{rightPanel}</div>
       </div>
     ) : (
       <div className="text-center">Loading...</div>
