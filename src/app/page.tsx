@@ -16,7 +16,6 @@ import { useState, useEffect } from "react";
 import { markupOriginalCopy } from "@/utils/markup-original-copy";
 import React from "react";
 import toast from "react-hot-toast";
-import { getClassNameForSentence } from "@/utils/get-class-name-for-sentence";
 
 export default function Page() {
   const [originalCopy, setOriginalCopy] = useState("Loading...");
@@ -25,8 +24,6 @@ export default function Page() {
     ComplianceViolation[]
   >([]);
   const [idxOfCurrViolation, setCurrViolationIdx] = useState(0);
-  const [idOfViolationBeingViewed, setIdOfViolationBeingViewed] =
-    useState<string>();
   const [hasApproved, setHasApproved] = useState(false);
 
   const [chosenSuggestions, setChosenSuggestions] =
@@ -71,8 +68,6 @@ export default function Page() {
       const initialChosenSuggestions =
         getInitialChosenSuggestions(violationSuggestions);
       setChosenSuggestions(initialChosenSuggestions);
-
-      setIdOfViolationBeingViewed(violationSuggestions[0]?.id || "");
       setHasDataLoaded(true);
     }, 1000);
   }, []);
@@ -92,10 +87,13 @@ export default function Page() {
       return;
     }
 
-    const classNameForSentence = getClassNameForSentence(
-      violationSuggestions[idxOfCurrViolation].id === idOfViolationBeingViewed,
-      hasApproved
-    );
+    const classNameIfApproved = '"p-1"';
+    const classNameForViolationInView = hasApproved
+      ? classNameIfApproved
+      : "hover:cursor-pointer p-1 rounded-md border-3 border-black-800";
+    const classNameForViolationNotInView = hasApproved
+      ? classNameIfApproved
+      : "hover:cursor-pointer p-1 rounded-md border-1 border-black-200";
 
     const updatedMarkup = markupOriginalCopy({
       originalCopy,
@@ -103,7 +101,8 @@ export default function Page() {
       chosenSuggestions,
       onClickSentence: hasApproved ? () => {} : handleClickSentence,
       idOfCurrViolation: violationSuggestions[idxOfCurrViolation].id,
-      classNameForSentence,
+      classNameForViolationInView,
+      classNameForViolationNotInView,
     });
 
     setWorkingCopy(updatedMarkup);
@@ -120,14 +119,10 @@ export default function Page() {
       (idxOfCurrViolation - 1 + violationSuggestions.length) %
       violationSuggestions.length;
 
-    const violation = violationSuggestions[prevIdx];
-    setIdOfViolationBeingViewed(violation.id);
     setCurrViolationIdx(prevIdx);
   };
   const handleClickNext = () => {
     const nextIdx = (idxOfCurrViolation + 1) % violationSuggestions.length;
-    const violation = violationSuggestions[nextIdx];
-    setIdOfViolationBeingViewed(violation.id);
     setCurrViolationIdx(nextIdx);
   };
 

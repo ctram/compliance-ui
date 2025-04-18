@@ -25,27 +25,30 @@ export function CopyReview({
     }
   }, [workingCopy]);
 
-  if (hasApproved) {
-    return (
-      <div className=" p-4 flex flex-col items-center">
-        <div className="text-lg font-bold mb-8">Copy Review</div>
-        <div className="w-2/3">{content}</div>
-        <div className="flex flex-row gap-2">
-          <ActionButton text="Cancel Approval" onClick={onCancelApproval} />
-          <ActionButton text="Next" onClick={onNext} />
-        </div>
-      </div>
-    );
-  }
+  const actionButtons = hasApproved ? (
+    <>
+      <ActionButton text="Cancel Approval" onClick={onCancelApproval} />
+      <ActionButton text="Next" onClick={onNext} />
+    </>
+  ) : (
+    <>
+      <ActionButton text="Approve" onClick={onApprove} />
+      <ActionButton text="Reset" onClick={onReset} />
+    </>
+  );
+
+  const approvedMsg = hasApproved ? (
+    <div className="text-green-700 text-center mb-4 font-bold">
+      Copy has been approved. <span className="text-green-700">&#x2714;</span>
+    </div>
+  ) : null;
 
   return (
     <div className=" p-4 flex flex-col items-center">
       <div className="text-lg font-bold mb-8">Copy Review</div>
       <div className="w-2/3 leading-14">{content}</div>
-        <div className="flex flex-row gap-2">
-          <ActionButton text="Approve" onClick={onApprove} />
-          <ActionButton text="Reset" onClick={onReset} />
-        </div>
+      {approvedMsg}
+      <div className="flex flex-row gap-2 mt-4">{actionButtons}</div>
     </div>
   );
 }

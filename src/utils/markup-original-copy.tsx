@@ -12,14 +12,16 @@ export function markupOriginalCopy({
   chosenSuggestions,
   onClickSentence,
   idOfCurrViolation,
-  classNameForSentence,
+  classNameForViolationInView,
+  classNameForViolationNotInView,
 }: {
   originalCopy: string;
   violationSuggestions: ComplianceViolation[];
   chosenSuggestions: ChosenSuggestions;
   onClickSentence: (violationId: string) => void;
   idOfCurrViolation: string;
-  classNameForSentence: string;
+  classNameForViolationInView: string;
+  classNameForViolationNotInView: string;
 }): React.ReactNode {
   // Create a simple array of text segments and React elements
   const segments: (string | React.ReactNode)[] = [];
@@ -40,6 +42,9 @@ export function markupOriginalCopy({
       id,
     } = violation;
     const isInView = idOfCurrViolation === id;
+    const classNameForSentence = isInView
+      ? classNameForViolationInView
+      : classNameForViolationNotInView;
     const innerSuggestions: string[] = suggestions || [];
     const innerSourceSentence = sourceSentence || "";
 
