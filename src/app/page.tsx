@@ -213,7 +213,7 @@ export default function Page() {
 
   const rightPanel = hasApproved ? (
     <div className="p-4 flex flex-col items-center">
-      <div className="text-xl font-bold mb-4">Copy has been approved</div>
+      <div className="text-xl font-bold mb-4">Copy Has Been Approved</div>
       <p className="text-sm text-gray-500">
         You can now move on to the next copy.
       </p>
