@@ -17,11 +17,41 @@ export type ComplianceViolation = {
   endIdxOfOriginalFragment?: number;
 };
 
+/**
+ * Not sure the "start" and end field values are correct or perhaps I do not understand
+ * how to use them. I ended up not using them for the purpose of locating
+ * the violation text within the original copy and used a different approach.
+ *
+ * Also, I notice the violation fragments do not include ending punctuation,
+ * yet some of the suggested corrections do include ending punctuation, which
+ * forces us to address potential duplicate punctuation when injecting a
+ * suggested correction into the original copy.
+ *
+ * For example, imagine the original copy is:
+ *
+ *      "Our product is very good."
+ *
+ * And the violation fragment is:
+ *
+ *      "is very good"
+ *
+ * If a suggested correction was:
+ *
+ *      "exceeds industry standards."
+ *
+ * And we inject the suggested correction into the original copy, without any additonal
+ * text manipulation, we get:
+ *
+ *      "Our product exceeds industry standards.."
+ *
+ * Notice the extra period at the end of the final sentence.
+ */
 export function getComplianceViolations(): ComplianceViolation[] {
   return [
     {
       id: "v1",
       text: "guarantees consistent returns of up to 20% annually",
+
       start: 102,
       end: 153,
       length: 51,
@@ -52,7 +82,7 @@ export function getComplianceViolations(): ComplianceViolation[] {
   ];
 }
 
-export type Suggestions = Record<string, string[]>;
+type Suggestions = Record<string, string[]>;
 
 export function getSuggestions(): Suggestions {
   return {
