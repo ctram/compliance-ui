@@ -46,8 +46,8 @@ export function SuggestionPanel({
   );
 
   const baseClassName = "rounded-md p-4 hover:cursor-pointer";
-  const selectedClassName = "border-3 border-black-800";
-  const notSelectedClassName = "border-1 border-black-200";
+  const selectedClassName = "border-[3px] border-gray-800";
+  const notSelectedClassName = "border border-gray-200";
 
   const markedupSentencesEls = suggestions.map((suggestion, i) => {
     const hash =
