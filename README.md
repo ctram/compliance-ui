@@ -1,11 +1,37 @@
 # Compliance Review UI
 
-A Next.js application for reviewing and editing compliance-related content.
+A Next.js application for reviewing and editing compliance copy, with auto-generated correction suggestions.
+
+## Live Demo
+
+[https://ctram.github.io/compliance-ui/](https://ctram.github.io/compliance-ui/)
 
 ## Features
 
-- Double-click copy to enter edit mode
-- Original text comparison view
+- Reviews text content for compliance violations.
+- Displays original text with highlighted violations.
+- Provides correction suggestions for each violation.
+- Allows both automated and manual text corrections.
+
+## Design Thoughts
+
+UX was designed with a focus on simplicity, as the feature is meant to be used hundreds of times a day by the user.
+
+There are two main scopes:
+1. The original copy in its entirely. This provides the user with a view of the context, the "forest".
+2. Individual compliance violations. This provides the user with a view of the "trees".
+
+Other considerations:
+- The UI contains a lot of negative space, to help draw user eyes to relevant text and clickable components.
+- Use of shadows is minimal to reduce cognitive load. Instead, simple borders are used to outline discrete UI components.
+- Buttons use familiar shapes and hover cursor icons.
+- Within the original copy, compliance violations are marked using strong underlines along with cursor pointer icon upon hovering.
+- There are two ways to navigate between compliance violations:
+  - Clicking directly on the compliance violation in the left panel.
+  - Using the pagination/navigator at the top of the right panel.
+- This allows user to focus on a single panel at a time, as needed.
+- After a suggested correction is selected, the original violation can be shown or hidden within the left panel, allowing the user to view only the final, modified copy (reducing cognitive load) or to view changes in context of the original copy, to check whether any messaging has been lost, etc.
+
 
 ## Tech Stack
 
@@ -39,10 +65,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 > You might need to use https, that is, navigate to https://localhost:3000,
 > depending on your browser settings.
 >
-> The app does not support https, so you might receive a warning from your browser.
+> The local app does not support https, so you might receive a warning from your browser.
 > Tell the browser you don't care and to go to the address, anyway.
 
-## Usage
+## App Usage
 
 ### Initial Load
 
@@ -52,8 +78,8 @@ The app loads a single copy to review, along with any violations found within th
 
 The interface is split into two main panels:
 
-- **Left Panel**: Displays the entire copy with user-chosen suggestions for violation remediation
-- **Right Panel**: Shows one violation at a time with its suggested corrections
+- **Left Panel**: Displays the entire copy with user-chosen suggested corrections for violation remediation.
+- **Right Panel**: Shows one violation at a time with its suggested corrections.
 
 ### Navigating Violations
 
@@ -94,5 +120,5 @@ The project uses Next.js with the App Router and TypeScript. Components are buil
 - After user manually edits copy, process the edited copy again for new violations and suggested corrections.
 - Support reviewing multiple copy instances.
 - Violation category filtering.
-- Batch approval workflow.
+- Ability to perform Batch approvals, with and without option for app to automatically choose corrections.
 - Review history and audit trail.
